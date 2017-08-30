@@ -1,0 +1,86 @@
+﻿<Window x:Class="FileExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileExplorer"
+        mc:Ignorable="d"
+        xmlns:prop="clr-namespace:FileExplorer.Properties"
+        Closing="Window_Closing"
+        MinHeight="300"
+        MinWidth="590"
+        Title="{x:Static prop:Resources.fileExplorer}" Height="700" Width="800">
+    <Window.Resources>
+        <ResourceDictionary Source="Dictionary1.xaml"/>
+    </Window.Resources>
+    
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Height="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="dirDisplay" IsReadOnly="True" Text="{Binding parseDir}" TextChanged="dirDisplay_TextChanged" />
+            <Button Grid.Column="1" Content="{x:Static prop:Resources.buttonText}" Click="Button_Click"/>
+        </Grid>
+
+        <Grid>
+            <Grid Grid.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="265" Width="3*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition MinWidth="190" Width="*"/>
+                    <ColumnDefinition MinWidth="150" Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Style="{StaticResource panelMsg}" x:Name="parseMsg" Grid.ZIndex="2" Orientation="Horizontal">
+                    <Image Style="{StaticResource statusIcon}" Source="loading.png" VerticalAlignment="Top"/>
+                    <Label Style="{StaticResource statusMsg}" Content="{x:Static prop:Resources.parsingDirectory}" />
+                </StackPanel>
+
+                <TreeView x:Name="fileDisplay" Grid.RowSpan="5">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding children}">
+                            <StackPanel Orientation="Horizontal" >
+                                <CheckBox Click="chk_clicked" IsChecked="{Binding isChecked}" />
+                                <Image Source="{Binding iconLoc}" Width="18" />
+                                <Label Content="{Binding name}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Grid.RowSpan="5"/>
+
+                <Label Grid.Column="2" Grid.Row="0" Content="{x:Static prop:Resources.folders}" Style="{StaticResource lbl}"/>
+                <Label Grid.Column="3" Grid.Row="0" Style="{StaticResource resultLbl}"
+                   Content="{Binding folders}"/>
+
+                <Label Grid.Column="2" Grid.Row="1" Content="{x:Static prop:Resources.files}" Style="{StaticResource lbl}"/>
+                <Label Grid.Column="3" Grid.Row="1" Style="{StaticResource resultLbl}"
+                   Content="{Binding files}"/>
+
+                <Label Grid.Column="2" Grid.Row="2" Content="{x:Static prop:Resources.selectedFolders}" Style="{StaticResource lbl}"/>
+                <Label Grid.Column="3" Grid.Row="2" Style="{StaticResource resultLbl}"
+                   Content="{Binding selectedFolders}"/>
+
+                <Label Grid.Column="2" Grid.Row="3" Content="{x:Static prop:Resources.selectedFiles}" Style="{StaticResource lbl}"/>
+                <Label Grid.Column="3" Grid.Row="3" Style="{StaticResource resultLbl}"
+                   Content="{Binding selectedFiles}"/>
+
+                <Label Grid.Column="2" Grid.Row="4" Content="{x:Static prop:Resources.selectedBytes}" Style="{StaticResource lbl}"/>
+                <Label Grid.Column="3" Grid.Row="4" Style="{StaticResource resultLbl}"
+                   Content="{Binding sizeInBytes}"/>
+            </Grid>
+        </Grid>
+    </DockPanel> 
+</Window>
